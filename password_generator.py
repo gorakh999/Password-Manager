@@ -1,4 +1,5 @@
 import random
+import json
 
 def generate_pass():
     s1 = list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
@@ -16,10 +17,4 @@ def generate_pass():
 
 
 # print(generate_password())
-
-def save_password(str1):
-    
-    with open("data.txt", "a") as f:
-        f.write(str1)
-        f.write("\n")
 
