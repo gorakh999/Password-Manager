@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 import pyperclip
 
-from matplotlib.pyplot import text
+import json
 import password_generator
 
 
@@ -29,11 +29,29 @@ def save():
     emailNameEntry = email_entry.get()
     passwordEntry = pass_entry.get()
 
+    new_data = {
+        websiteNameEntry : {
+            "email" : emailNameEntry,
+            "password" : passwordEntry
+        }
+    }
+
     if (len(websiteNameEntry) > 0 and len(emailNameEntry) > 0 and len(passwordEntry) > 0):
-        is_ok = messagebox.askyesno(title="Website", message=f"You have Entered these details :\n Website : {websiteNameEntry}\n Email : {emailNameEntry}\n Password : {passwordEntry}")
-        if is_ok:
-            text = websiteNameEntry + ' | ' + emailNameEntry + ' | ' + passwordEntry
-            password_generator.save_password(text)
+        
+        try:
+            # reading JSON File
+            with open("data.json", "r") as f:
+                data = json.load(f)
+                data.update(new_data)
+            # writing updated JSON File
+            with open("data.json", "w") as f:
+                json.dump(data, f, indent=4)
+
+        except FileNotFoundError:
+            with open("data.json", "w") as f:
+                json.dump(new_data, f, indent=4)
+
+        finally:
             website_entry.delete(0, END)
             pass_entry.delete(0, END)
     else:
@@ -50,8 +68,8 @@ pass_name = Label(text="Password:")
 pass_name.grid(row=3, column=0)
 
 
-website_entry = Entry(width=36)
-website_entry.grid(row=1, column=1, columnspan=2)
+website_entry = Entry(width=21)
+website_entry.grid(row=1, column=1)
 website_entry.focus()
 
 email_entry = Entry(width=36)
@@ -60,6 +78,9 @@ email_entry.insert(0, "gorakhgupta343@gmail.com")
 
 pass_entry = Entry(width=18)
 pass_entry.grid(row=3, column=1)
+
+search_button = Button(text="Search Password")
+search_button.grid(row=1, column=2)
 
 generate_button = Button(text="Generate Password", command=generate_password)
 generate_button.grid(row=3, column=2)
