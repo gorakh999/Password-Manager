@@ -17,6 +17,30 @@ canvas.create_image(100, 100, image=logo_img)
 canvas.grid(row=0, column=1)
 # canv.pack()
 
+
+def search_password():
+    websiteNameEntry = website_entry.get()
+
+    if (len(websiteNameEntry)) > 0:
+        try:
+            with open("data.json", "r") as f:
+                data = json.load(f)
+
+                email_id = data[websiteNameEntry]["email"]
+                password = data[websiteNameEntry]["password"]
+
+                messagebox.showinfo(title=websiteNameEntry, message=f"Email : {email_id} \nPassword : {password}")
+
+        except FileNotFoundError:
+            messagebox.showinfo(title=websiteNameEntry, message=f"No Data File Found")
+
+        except KeyError:
+            messagebox.showinfo(title=websiteNameEntry, message=f"Details for {websiteNameEntry} Does Not Exists")
+
+    else:
+        messagebox.showerror(title="Error", message="Please Don't Leave any Field Empty")
+
+
 def generate_password():
     pass_entry.delete(0, END)
     password = password_generator.generate_pass()
@@ -68,24 +92,24 @@ pass_name = Label(text="Password:")
 pass_name.grid(row=3, column=0)
 
 
-website_entry = Entry(width=21)
+website_entry = Entry(width=29)
 website_entry.grid(row=1, column=1)
 website_entry.focus()
 
-email_entry = Entry(width=36)
-email_entry.grid(row=2, column=1, columnspan=2)
+email_entry = Entry(width=29)
+email_entry.grid(row=2, column=1)
 email_entry.insert(0, "gorakhgupta343@gmail.com")
 
-pass_entry = Entry(width=18)
+pass_entry = Entry(width=29)
 pass_entry.grid(row=3, column=1)
 
-search_button = Button(text="Search Password")
+search_button = Button(text="Search Password", command=search_password)
 search_button.grid(row=1, column=2)
 
 generate_button = Button(text="Generate Password", command=generate_password)
 generate_button.grid(row=3, column=2)
 
-add_button = Button(text="Add", width=30, command=save)
+add_button = Button(text="Add", width=40, command=save)
 add_button.grid(row=4, column=1, columnspan=2)
 
 

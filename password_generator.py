@@ -16,5 +16,4 @@ def generate_pass():
     return new_password
 
 
-# print(generate_password())
 
